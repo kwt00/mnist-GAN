@@ -16,10 +16,11 @@ from numpy.random.mtrand import rand
 train_data.reshape(len(train_data), 28, 28, 1)
 train_data = train_data/255 # Formats it in [0,1]
 sample_dimensions=100
-
 batch=256
 buffer=70000
-def format(sample, n): return sample.reshape(n,28,28,1)
+
+def format(sample, n): # shape data into discriminator-readable format
+  return sample.reshape(n,28,28,1)
 
 def noise(n):
   noise=np.random.randn(n*sample_dimensions).reshape(n, sample_dimensions) # create noise in [-1,1] shape into n chunks of 100 values
@@ -76,7 +77,7 @@ def make_gan(d, g):
   return model
 
 discriminator=make_discriminator()
-generator=make_generator()
+generator=make_generator() # assemble our team of models
 gan=make_gan(discriminator, generator)
 
 def train(g, d, gan, e=100, batches=256): # combo model
@@ -95,7 +96,7 @@ def train(g, d, gan, e=100, batches=256): # combo model
       g_loss = gan.train_on_batch(X_gan, y_gan) # train the GAN, since discriminator is locked only generator will update
       print('>%d, %d/%d, d=%.3f, g=%.3f' % (i+1, j+1, bat_per_epo, d_loss, g_loss)) # updates
 
-def generate_img(g):  
+def generate_img(g): # display generator output - reshaped to fit matplotlib's imshow function
   plt.imshow((g.predict(noise(1))*255).reshape(28,28))
 
-generate_img(generator)
+generate_img(generator) # final result!
