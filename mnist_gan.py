@@ -49,7 +49,7 @@ def make_discriminator(in_shape=(28,28,1)):
   model.add(Dropout(0.5))
   model.add(Flatten())
   model.add(Dense(1, activation='sigmoid')) # data must be between [0,1]
-  opt = Adam(lr=0.00021, beta_1=0.5) # adam optimizer -- research this more
+  opt = Adam(lr=0.00021, beta_1=0.5)
   model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy']) # binary crossentropy -- to classify between 2 choices based on accuracy of comparison to samples
   return model
 
@@ -61,7 +61,7 @@ def make_generator():
   model.add(Reshape((7, 7, 128))) # Reformat data -- prepares for merging of many images
   model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same')) # Increase resolution to 14x14 ("Upsample") -- 7x7 * 2x2(strides) = 14x14 pixel image
   model.add(LeakyReLU(alpha=0.2)) # More Leaky ReLU yayyyy
-  model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same')) # stride to 28x28 -- kernel dictates height and width of convo window -- research more
+  model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same')) # stride to 28x28 -- kernel dictates height and width of convo window
   model.add(LeakyReLU(alpha=0.2))
   model.add(Conv2D(1, (7,7), activation='sigmoid', padding='same')) # output layer -- in [0,1], kicks up kernel size and completes
   # no compilation -- model is not directly updating itself
